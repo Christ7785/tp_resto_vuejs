@@ -1,9 +1,22 @@
 <template>
     <div class="plat-item">
+        <!-- Slot pour ajouter un badge ou autre élément sur le plat -->
+        <div class="badge-container">
+            <slot name="badge"></slot>
+        </div>
+
         <h3>{{ plat.nom }}</h3>
         <p>{{ plat.description }}</p>
-        <p class="prix">{{ plat.prix }}€</p>
-        <CustumButton @click="ajouterAuPanier">Ajouter au panier</CustumButton>
+
+        <!-- Slot par défaut pour personnaliser le contenu -->
+        <slot>
+            <p class="prix">{{ plat.prix }}€</p>
+        </slot>
+
+        <!-- Slot pour personnaliser le bouton d'action -->
+        <slot name="action">
+            <CustumButton @click="ajouterAuPanier">Ajouter au panier</CustumButton>
+        </slot>
     </div>
 </template>
 
@@ -36,6 +49,13 @@ export default {
     margin: 10px;
     border-radius: 8px;
     background-color: white;
+    position: relative;
+}
+
+.badge-container {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .prix {
@@ -43,4 +63,4 @@ export default {
     color: #26b3c6;
     font-size: 1.2em;
 }
-</style> 
+</style>

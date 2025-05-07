@@ -8,7 +8,9 @@ export default {
     },
     data() {
         return {
-            panier: []
+            panier: [],
+            commandes: [],
+            prochainIdCommande: 1
         }
     },
     methods: {
@@ -27,8 +29,33 @@ export default {
             this.panier.splice(index, 1)
         },
         finaliserCommande() {
-            alert('Votre commande a été validée !')
-            this.panier = []
+            if (this.panier.length === 0) {
+                alert('Votre panier est vide !')
+                return
+            }
+
+            const nomClient = prompt('Veuillez entrer votre nom pour finaliser la commande:', 'Client')
+
+            if (nomClient) {
+                const nouvelleCommande = {
+                    id: this.prochainIdCommande++,
+                    nomClient,
+                    plats: [...this.panier],
+                    prete: false,
+                    date: new Date()
+                }
+
+                this.commandes.push(nouvelleCommande)
+
+                this.panier = []
+
+                alert('Votre commande a été validée !')
+            }
+        }
+    },
+    provide() {
+        return {
+            commandes: this.commandes
         }
     }
 }
@@ -44,18 +71,15 @@ export default {
         <nav class="navigation">
             <router-link to="/" class="lien">Accueil</router-link>
             <router-link to="/menu" class="lien">Menu</router-link>
+            <router-link to="/admin" class="lien">Admin</router-link>
         </nav>
 
         <main class="contenu">
             <router-view @ajouter-au-panier="ajouterAuPanier" />
         </main>
 
-        <Panier 
-            :plats="panier" 
-            @modifier-quantite="modifierQuantite"
-            @supprimer-plat="supprimerPlat"
-            @finaliser-commande="finaliserCommande"
-        />
+        <Panier :plats="panier" @modifier-quantite="modifierQuantite" @supprimer-plat="supprimerPlat"
+            @finaliser-commande="finaliserCommande" />
     </div>
 </template>
 

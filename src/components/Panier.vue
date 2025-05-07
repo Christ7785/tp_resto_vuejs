@@ -17,7 +17,7 @@
                 </div>
                 <button class="supprimer" @click="supprimerPlat(index)">Supprimer</button>
             </div>
-            <div class="total">
+            <div class="total" :class="{ 'total-change': totalChanged }">
                 Total: {{ total }}€
             </div>
             <CustumButton @click="finaliserCommande">Finaliser la commande</CustumButton>
@@ -37,6 +37,12 @@ export default {
         plats: {
             type: Array,
             required: true
+        }
+    },
+    data() {
+        return {
+            totalChanged: false,
+            lastTotal: 0
         }
     },
     computed: {
@@ -59,6 +65,21 @@ export default {
         finaliserCommande() {
             this.$emit('finaliser-commande')
         }
+    },
+    watch: {
+        total: function (newTotal, oldTotal) {
+            if (oldTotal && newTotal !== oldTotal) {
+                this.totalChanged = true
+                this.lastTotal = oldTotal
+
+                setTimeout(() => {
+                    this.totalChanged = false
+                }, 300)
+            }
+        }
+    },
+    mounted() {
+        console.log('Le composant Panier est monté')
     }
 }
 </script>
@@ -113,5 +134,25 @@ export default {
     font-weight: bold;
     font-size: 1.2em;
     margin: 1rem 0;
+    transition: color 0.3s ease;
 }
-</style> 
+
+.total-change {
+    color: #ff6b6b;
+    animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+</style>

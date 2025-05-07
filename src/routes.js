@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from './pages/HomePage.vue'
 import MenuPage from './pages/MenuPage.vue'
+import AdminPage from './pages/AdminPage.vue'
 import NotFound from './pages/NotFound.vue'
 
 const routes = [
@@ -13,6 +14,11 @@ const routes = [
         path: '/menu',
         name: 'menu',
         component: MenuPage
+    },
+    {
+        path: '/admin',
+        name: 'admin',
+        component: AdminPage
     },
     {
         path: '/:pathMatch(.*)*',
